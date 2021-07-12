@@ -9,15 +9,18 @@ html, body {
 /* IDs */
 #top_ui {
     height: 20%;
-    outline-width: 1px;
+    outline-width: 5px;
     outline-color: black;
-
+    outline-style: solid;
+    background-color: green;
 }
 
 #bottom_ui {
     height: 20%;
-    outline-width: 1px;
+    outline-width: 5px;
     outline-color: black;
+    outline-style: solid;
+    background-color: green;
 }
 
 #undo {
@@ -66,7 +69,9 @@ html, body {
 
 /* Classes */
 .top_ui_tool {
-
+    width: 10%;
+    height: 10%;
+    background-color: pink;
 }
 
 .bottom_ui_tool {
