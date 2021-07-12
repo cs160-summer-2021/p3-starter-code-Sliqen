@@ -7,20 +7,44 @@ html, body {
 }
 
 /* IDs */
+#myCanvas {
+    height: 70%;
+    width: 100%; 
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#drag_ui {
+    position: absolute;
+    top: 30%;
+    left: 0%;
+    background-color: red;
+}
+
+
 #top_ui {
-    height: 20%;
+    height: 15%;
+    width: 100%; 
     outline-width: 5px;
     outline-color: black;
     outline-style: solid;
-    background-color: green;
+
+    display: flex;
+    align-items: center;
 }
 
 #bottom_ui {
-    height: 20%;
+    height: 15%;
+    width: 100%; 
     outline-width: 5px;
     outline-color: black;
     outline-style: solid;
-    background-color: green;
+    
+    display: flex;
+    align-items: center;
 }
 
 #undo {
@@ -43,7 +67,7 @@ html, body {
 
 }
 
-#pen {
+#pencil {
 
 }
 
@@ -69,11 +93,18 @@ html, body {
 
 /* Classes */
 .top_ui_tool {
-    width: 10%;
-    height: 10%;
-    background-color: pink;
+    font-size: 70px;
+    /* temp */
+    outline-width: 1px;
+    outline-color: black;
+    outline-style: solid;
 }
 
 .bottom_ui_tool {
+    font-size: 70px;
 
+    /* temp */
+    outline-width: 1px;
+    outline-color: black;
+    outline-style: solid;
 }
