@@ -1,0 +1,74 @@
+/* New interactions CSS  */
+
+html, body {
+    height: 100%; 
+    width: 100%; 
+    margin: 0; 
+}
+
+/* IDs */
+#top_ui {
+    height: 20%;
+    outline-width: 1px;
+    outline-color: black;
+
+}
+
+#bottom_ui {
+    height: 20%;
+    outline-width: 1px;
+    outline-color: black;
+}
+
+#undo {
+
+}
+
+#redo {
+
+}
+
+#grid {
+
+}
+
+#rotate-left {
+
+}
+
+#rotate-right {
+
+}
+
+#pen {
+
+}
+
+#erase {
+
+}
+
+#fill {
+
+}
+
+#palette {
+
+}
+
+#hand {
+
+}
+
+#zoom {
+
+}
+
+/* Classes */
+.top_ui_tool {
+
+}
+
+.bottom_ui_tool {
+
+}
