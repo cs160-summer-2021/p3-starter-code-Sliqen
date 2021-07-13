@@ -39,88 +39,88 @@
 		    margin-left: auto;
 		    margin-right: auto;
 		    display: block;
-		} */
+		} */ 
 	</style>
 
-	<script type="text/javascript" canvas="canvas">
-		// window.onload = function() {
-		// 	var canvas = document.getElementById('myCanvas');
+	<!-- <script type="text/javascript" canvas="canvas">
+		window.onload = function() {
+			var canvas = document.getElementById('myCanvas');
 
-		// 	// coloring page
-		// 	var mandala = {
-		// 		item: null,
-		// 		lastClicked: null,
-		// 		filePath: '/static/coloring/images/mandala-freepik.svg'
-		// 	};
+			// coloring page
+			var mandala = {
+				item: null,
+				lastClicked: null,
+				filePath: '/static/coloring/images/mandala-freepik.svg'
+			};
 
-		// 	// color palette
-		// 	var cp = {
-		// 		history: ["#000000"], // black selected by default
-		// 		options: [],
-		// 		$container: $('#color-palette')
-		// 	}
+			// color palette
+			var cp = {
+				history: ["#000000"], // black selected by default
+				options: [],
+				$container: $('#color-palette')
+			}
 
-		// 	function myCustomInteraction() {
-		// 		var tool = new paper.Tool();
+			function myCustomInteraction() {
+				var tool = new paper.Tool();
 
-		// 		tool.onMouseDown = function (event) {
-		// 		    var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
-		// 		    if (hit) {
-		// 		    		// Color pallette keeps track of the full history of colors, though we
-		// 		    		// only color in with the most-recent color.
-		// 		        hit.item.fillColor = cp.history[cp.history.length - 1];
-		// 		    }
-		// 		}
-		// 	}
+				tool.onMouseDown = function (event) {
+				    var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
+				    if (hit) {
+				    		// Color pallette keeps track of the full history of colors, though we
+				    		// only color in with the most-recent color.
+				        hit.item.fillColor = cp.history[cp.history.length - 1];
+				    }
+				}
+			}
 
-		// 	// create a color palette with the given colors
-		// 	function createColorPalette(colors){
+			// create a color palette with the given colors
+			function createColorPalette(colors){
 
-		// 		// create a swatch for each color
-		// 		for (var i = colors.length - 1; i >= 0; i--) {
-		// 			var $swatch = $("<div>").css("background-color", colors[i])
-		// 							   .addClass("swatch");
-		// 			$swatch.click(function(){
-		// 				// add color to the color palette history
-		// 			  	cp.history.push($(this).css("background-color"));
-		// 			});
-		// 			cp.$container.append($swatch);
-		// 		}
-		// 	}
+				// create a swatch for each color
+				for (var i = colors.length - 1; i >= 0; i--) {
+					var $swatch = $("<div>").css("background-color", colors[i])
+									   .addClass("swatch");
+					$swatch.click(function(){
+						// add color to the color palette history
+					  	cp.history.push($(this).css("background-color"));
+					});
+					cp.$container.append($swatch);
+				}
+			}
 
-		// 	// loads a set of colors from a json to create a color palette
-		// 	function getColorsCreatePalette(){
-		// 		cp.$container.html(" ");
-		// 		$.getJSON('/static/coloring/vendors/material/material-colors.json', function(colors){
-		// 			var keys = Object.keys(colors);
-		// 			for (var i = keys.length - 1; i >= 0; i--) {
-		// 				cp.options.push(colors[keys[i]][500]);
-		// 			}
-		// 			createColorPalette(cp.options);
-		// 		});
-		// 	}
+			// loads a set of colors from a json to create a color palette
+			function getColorsCreatePalette(){
+				cp.$container.html(" ");
+				$.getJSON('/static/coloring/vendors/material/material-colors.json', function(colors){
+					var keys = Object.keys(colors);
+					for (var i = keys.length - 1; i >= 0; i--) {
+						cp.options.push(colors[keys[i]][500]);
+					}
+					createColorPalette(cp.options);
+				});
+			}
 
-		// 	function init(custom){
-		// 		paper.setup(canvas);
-		// 		getColorsCreatePalette();
+			function init(custom){
+				paper.setup(canvas);
+				getColorsCreatePalette();
 
-		// 		paper.project.importSVG(mandala.filePath, function(item) {
-		// 			mandala.item = item._children["design-freepik"];
-		// 		    paper.project.insertLayer(0,mandala.item);
+				paper.project.importSVG(mandala.filePath, function(item) {
+					mandala.item = item._children["design-freepik"];
+				    paper.project.insertLayer(0,mandala.item);
 
-		// 		    if (custom) {
-		// 		    	myCustomInteraction();
-		// 		    } else {
-		// 		    	myGradientInteraction();
-		// 		    }
+				    if (custom) {
+				    	myCustomInteraction();
+				    } else {
+				    	myGradientInteraction();
+				    }
 
-		// 		});
-		// 	}
+				});
+			}
 
-		// 	// Set up the mandala interactivity.
-		// 	init(true);
-			// }
-	</script>
+			// Set up the mandala interactivity.
+			init(true);
+			}
+	</script> -->
 </head>
 <body>
 	<div id="top_ui">  
@@ -153,7 +153,7 @@
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="fill" onclick="highlight('fill');"> 
 			<i class="bi bi-paint-bucket"></i> </span>
 
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="palette" onclick="alert('u clicked palette');"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="palette" onclick="showPalette();"> 
 			<i class="bi bi-palette"></i> </span>
 
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="hand"> 
@@ -174,19 +174,122 @@
 	<div id="color-palette"></div>
 </body>
 
-<script type="text/javascript"> 
+<script type="text/javascript" canvas="canvas" > 
 	// THIS IS FOR THE PAINT-BUCKET
 	// Maybe make a "current tool" var that tells you what tool you're on
 	// so it can help do the right checks to trigger the right interactions
 
 
+	// Current color
+	var current_Color = 'blue';
+
 	// Tool variable
-	var myTool;
+	var cur_Tool = "pencil";
 
 	// number of tools in quickslot
 	var numqsTools = 0;
 
 	var bottomTools = ["pencil", "erase", "fill", "palette", "hand", "zoom"];
+
+	var canvas = document.getElementById('myCanvas');
+
+	// coloring page
+	var mandala = {
+		item: null,
+		lastClicked: null,
+		filePath: '/static/coloring/images/mandala-freepik.svg'
+	};
+
+	// color palette
+	var cp = {
+		history: ["#000000"], // black selected by default
+		options: [],
+		$container: $('#color-palette')
+	}
+
+	function myCustomInteraction() {
+		var tool = new paper.Tool();
+		var myPath = new paper.Path();
+		myPath.strokeColor = 'black'; // create var cur_color
+
+		// If mouse drag and have pencil we can draw
+		tool.onMouseDrag = function (event) {
+			if (cur_Tool === "pencil") {
+				myPath.add(event.point);
+			}
+
+			if (cur_Tool === "erase") {
+				var myCircle = new paper.Path.Circle({
+					center: event.point,
+					radius: 3
+				});
+				myCircle.fillColor = 'white';
+				myPath.add(myCircle);
+			}
+		}
+
+		// If mouse click and have fill we can draw
+		tool.onMouseDown = function (event) {
+			if (cur_Tool === "fill") {
+				var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
+				if (hit) {
+						// Color pallette keeps track of the full history of colors, though we
+						// only color in with the most-recent color.
+					hit.item.fillColor = cp.history[cp.history.length - 1];
+				}
+			}
+		}
+	}
+
+	// create a color palette with the given colors
+	function createColorPalette(colors){
+
+		// create a swatch for each color
+		for (var i = colors.length - 1; i >= 0; i--) {
+			var $swatch = $("<div>").css("background-color", colors[i])
+							.addClass("swatch");
+			$swatch.click(function(){
+				// add color to the color palette history
+				cp.history.push($(this).css("background-color"));
+			});
+			cp.$container.append($swatch);
+		}
+	}
+
+	// loads a set of colors from a json to create a color palette
+	function getColorsCreatePalette(){
+		cp.$container.html(" ");
+		$.getJSON('/static/coloring/vendors/material/material-colors.json', function(colors){
+			var keys = Object.keys(colors);
+			for (var i = keys.length - 1; i >= 0; i--) {
+				cp.options.push(colors[keys[i]][500]);
+			}
+			createColorPalette(cp.options);
+		});
+	}
+
+	function init(custom){
+		paper.setup(canvas);
+		getColorsCreatePalette();
+
+		paper.project.importSVG(mandala.filePath, function(item) {
+			mandala.item = item._children["design-freepik"];
+			paper.project.insertLayer(0,mandala.item);
+
+			if (custom) {
+				myCustomInteraction();
+			} else {
+				myGradientInteraction();
+			}
+
+		});
+	}
+
+	// Set up the mandala interactivity.
+	init(true);
+
+
+
 
 	// highlights the tool you clicked on
 	function highlight(botTool) {
@@ -198,40 +301,43 @@
 				t.style.outline = "";
 			}
 		}
+
+		cur_Tool = botTool;
 	}
 			
 
 
-	/////////////// PENCIL /////////////////
+	/////////////// Click coloring /////////////////
 	$("#pencil").click(function() {
 		myTool = document.getElementById("pencil");
-		$("#pencil_icon").css('color', 'blue');
+		$("#pencil_icon").css('color', current_Color);
 	});
-				
+		
+	$("#fill").click(function() {
+		myTool = document.getElementById("pencil");
+		$("#fill").css('color', current_Color);
+	});		
 	// Pencil interaction
 	// IFF pencil and drag do this, so maybe differentiate the pencils when adding on to it 
 	// in the quickbar UI taskbar
-	function pencilInteraction() {
-		var myPath;
-		function onMouseDown(event) {
-			myPath = new Path();
-			myPath.strokeColor = $(myTool).color;
-		}
 
-		function onMouseDrag(event) {
-			myPath.add(event.point);
-		}
-	}
+	// function pencilInteraction() {
+	// 	var myPath;
+	// 	function onMouseDown(event) {
+	// 		myPath = new Path();
+	// 		myPath.strokeColor = $(myTool).color;
+	// 	}
+
+	// 	function onMouseDrag(event) {
+	// 		myPath.add(event.point);
+	// 	}
+	// }
 	
 
 	/////////////// ERASER /////////////////
 	// The way I did the erase was that it's just a tool to add a bunch of white circles
 	// when dragged
-	
-	$("#erase").click(function() {
-			myTool = document.getElementById("erase");
-			$("#erase_icon").css('color', 'blue');
-		});
+
 
 	// Eraser interaction
 	function eraserInteraction() {
@@ -244,18 +350,6 @@
 		}																	
 	}
 
-	// Palette interaction
-	// Should re-use code above 
-	function paletteInteraction() {
-
-	}
-
-	// Expand UI interaction
-	// Can make it so that if we click the button, it just switches from a whole toolbar
-	// to a truncated toolbar
-	function changeToolbarSize () {
-
-	}
 
 	// for drag ui, drag in to add, drag out to remove, click to use	
 	// the code steps are as follows:
@@ -264,14 +358,14 @@
 	// 3) append that exact object the the toolbar div
 	// 4) delete from the toolbar if object is dragged and dropped out of toolbar
 
-	//add and remove things from the toolbar
-	function drag_ui_add () {
-		$("#qs_tools").append("[insert item class here]")
-	}
+	//remove things from the toolbar
+
 
 	function drag_ui_remove () {
 		$("#qs_tools").delete("[the item you want to delete]")
 	}
+
+
 
 	// initalizes quickslot after page loads
 	function init_qs() {
@@ -288,6 +382,19 @@
 		}
 	}
 
+	$("#color-palette").hide();
+	function showPalette() {
+		if ($("#color-palette").is(":visible")) {
+			$("#color-palette").hide();
+		} else {
+			$("#color-palette").show();
+		}
+	}
+
+	// collaspes quick slot ui
+
+
+
 	
 	// resizes the quickslot when you add or remove items
 	function resize_qs() {
@@ -295,6 +402,8 @@
 		h = t.clientHeight * numqsTools;
 		document.getElementById("qs_tools").style.height = h + "px";
 	}
+
+	
 
 	// The other icon functionalities things should be implemented after
 	$(document).ready(function() {
@@ -321,6 +430,14 @@
 			revert: "invalid"
 		});
 
+
+		// Can't figure out how to drag out the tools individually
+		// $(document.querySelectorAll("#qs_tools")).draggable({
+		// 	revert: "invalid"
+		// });
+
+
+
 		$("#myCanvas").droppable({
 			accept: "#drag_ui"
 		});
@@ -333,13 +450,30 @@
 		$("#qs_tools").droppable({
 			accept: ".draggable_tool",
 			drop: function(event, ui) {
-				$(this).append($(ui.draggable).clone());
+				let toolcopy = $(ui.draggable).clone();
+				toolcopy.css('margin-left', '0px');
+				toolcopy.css('margin-right', '0px');
+				toolcopy.css('outline', 'none');
+				toolcopy.addClass("can_drag");
+
+				$(".can_drag").draggable({
+					revert: "invalid"
+				});
+
+				toolcopy.remove(".draggable_tool");
+
+				console.log(toolcopy.classname)
+				$(this).append(toolcopy);
 				numqsTools = numqsTools + 1;
 				resize_qs();
 			}
 		});
 
+
+		
 	});
+
+
 
 </script>
 

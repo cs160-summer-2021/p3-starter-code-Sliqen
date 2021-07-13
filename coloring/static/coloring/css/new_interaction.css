@@ -17,6 +17,25 @@ html, body {
     display: block;
 }
 
+#color-palette {
+    width: 300px;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 0;
+}
+
+.swatch {
+    width: 24px;
+    height: 24px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+    margin: 3px;
+}
+
+
 #drag_ui {
     position: absolute;
     top: 30%;
@@ -93,7 +112,13 @@ html, body {
 
 }
 
+
 /* Classes */
+.can_drag {
+    
+}
+
+
 .top_ui_tool {
     font-size: 70px;
     
@@ -116,3 +141,4 @@ html, body {
     margin-left: 50px;
     margin-right: 50px;
 }
+
