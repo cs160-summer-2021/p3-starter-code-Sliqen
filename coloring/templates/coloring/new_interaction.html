@@ -120,177 +120,23 @@
 		// 	// Set up the mandala interactivity.
 		// 	init(true);
 			// }
-
-
-
-			// THIS IS FOR THE PAINT-BUCKET
-			// Maybe make a "current tool" var that tells you what tool you're on
-				// so it can help do the right checks to trigger the right interactions
-
-
-			// Tool variable
-			var myTool;
-
-			// number of tools in quickslot
-			var numqsTools = 0;
-			
-
-
-			/////////////// PENCIL /////////////////
-			$("#pencil").click(function() {
-					myTool = document.getElementById("pencil");
-					$("#pencil").css('background-color', 'blue');
-				});
-				
-			// Pencil interaction
-			// IFF pencil and drag do this, so maybe differentiate the pencils when adding on to it 
-			// in the quickbar UI taskbar
-			function pencilInteraction() {
-				var myPath;
-				function onMouseDown(event) {
-					myPath = new Path();
-					myPath.strokeColor = $(myTool).color;
-				}
-
-				function onMouseDrag(event) {
-					myPath.add(event.point);
-				}
-			}
-			
-
-			/////////////// ERASER /////////////////
-			// The way I did the erase was that it's just a tool to add a bunch of white circles
-			// when dragged
-			
-			$("#erase").click(function() {
-					myTool = document.getElementById("erase");
-					$("#erase").css('background-color', 'blue');
-				});
-
-			// Eraser interaction
-			function eraserInteraction() {
-				function onMouseDrag(event) {
-					var circle = new Path.Circle({
-					center: event.middlePoint,
-					radius: event.delta.length / 2
-					});
-				circle.fillColor = 'white';
-				}																	
-			}
-
-			// Palette interaction
-			// Should re-use code above 
-			function paletteInteraction() {
-
-			}
-
-			// Expand UI interaction
-			// Can make it so that if we click the button, it just switches from a whole toolbar
-			// to a truncated toolbar
-			function changeToolbarSize () {
-
-			}
-
-			// for drag ui, drag in to add, drag out to remove, click to use	
-			// the code steps are as follows:
-			// 1) get the exact instance of the object you want (ex: green pen)
-			// 2) we drag that to the toolbar and drop it, so let the items be dragable and dropable
-			// 3) append that exact object the the toolbar div
-			// 4) delete from the toolbar if object is dragged and dropped out of toolbar
-
-			//add and remove things from the toolbar
-			function drag_ui_add () {
-				$("#qs_tools").append("[insert item class here]")
-			}
-
-			function drag_ui_remove () {
-				$("#qs_tools").delete("[the item you want to delete]")
-			}
-
-			// initalizes quickslot after page loads
-			function init_qs() {
-				t = document.getElementById("pencil");
-				h = t.clientHeight;
-				w = t.clientWidth;
-
-				document.getElementById("qs_tools").style.height = h + "px";
-				document.getElementById("qs_tools").style.width = w + "px";
-
-				q = document.getElementsByClassName("qs_ui")
-				for (let i = 0; i < q.length; i++) {
-					q[i].style.width = w + "px";
-				}
-			}
-
-			
-			// resizes the quickslot when you add or remove items
-			function resize_qs() {
-				t = document.getElementById("pencil");
-				h = t.clientHeight * numqsTools;
-				document.getElementById("qs_tools").style.height = h + "px";
-			}
-
-			// The other icon functionalities things should be implemented after
-			$(document).ready(function() {
-				// inits
-				$("#expand").hide();
-				init_qs();
-
-				// collaspes quick slot ui
-				$("#collaspe").click(function() {
-					$("#qs_tools").hide();
-					$("#expand").show();
-					$("#collaspe").hide();
-				});
-
-				// expands quickslot ui
-				$("#expand").click(function() {
-					$("#qs_tools").show();
-					$("#expand").hide();
-					$("#collaspe").show();
-				});
-
-				// allows for dragging quickslot ui
-				$("#drag_ui").draggable({
-					revert: "invalid"
-				});
-
-				$("#myCanvas").droppable({
-					accept: "#drag_ui"
-				});
-
-				// allows for dragging tools into the quickslot
-				$(".draggable_tool").draggable({
-					helper: "clone"
-				});
-
-				$("#qs_tools").droppable({
-					accept: ".draggable_tool",
-					drop: function(event, ui) {
-						$(this).append($(ui.draggable).clone());
-						numqsTools = numqsTools + 1;
-						resize_qs();
-					}
-				});
-
-			});
-
-
 	</script>
 </head>
 <body>
 	<div id="top_ui">  
-		<span class="top_ui_tool draggable_tool" id="undo" onclick=""> </span>
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="undo" onclick=""> 
+			<i class="bi bi-arrow-left"></i> </span>
 		
-		<span class="top_ui_tool draggable_tool" id="redo"> </span>
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="redo">
+			<i class="bi bi-arrow-right"></i> </span>
 
-		<span class="top_ui_tool draggable_tool" id="grid"> 
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="grid"> 
 			<i class="bi bi-grid-3x3"></i> </span>
 
-		<span class="top_ui_tool draggable_tool" id="rotate-left"> 
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-left"> 
 			<i class="bi bi-arrow-counterclockwise"></i> </span>
 			
-		<span class="top_ui_tool draggable_tool" id="rotate-right"> 
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-right"> 
 			<i class="bi bi-arrow-clockwise"></i> </span>
 
 	</div>
@@ -298,22 +144,22 @@
 	<canvas id="myCanvas" width="750px" height="750px"></canvas>
 
 	<div id="bottom_ui">  
-		<span class="bottom_ui_tool draggable_tool" id="pencil" onclick="alert('u clicked pencil');"> 
-			<i class="bi bi-pencil"></i></span>
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="pencil" onclick="highlight('pencil');"> 
+			<i class="bi bi-pencil" id="pencil_icon"></i></span>
 
-		<span class="bottom_ui_tool draggable_tool" id="erase" onclick="alert('u clicked eraser');"> 
-			<i class="bi bi-eraser-fill"></i></span>
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="erase" onclick="highlight('erase');"> 
+			<i class="bi bi-eraser-fill" id="erase_icon"></i></span>
 
-		<span class="bottom_ui_tool draggable_tool" id="fill" onclick="alert('u clicked fill');"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="fill" onclick="highlight('fill');"> 
 			<i class="bi bi-paint-bucket"></i> </span>
 
-		<span class="bottom_ui_tool draggable_tool" id="palette" onclick="alert('u clicked palette');"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="palette" onclick="alert('u clicked palette');"> 
 			<i class="bi bi-palette"></i> </span>
 
-		<span class="bottom_ui_tool draggable_tool" id="hand"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="hand"> 
 			<i class="fa fa-hand-paper-o" aria-hidden="true"></i> </span>
 			
-		<span class="bottom_ui_tool draggable_tool" id="zoom"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="zoom"> 
 			<i class="bi bi-zoom-in"></i></span>
 			
 	</div>
@@ -327,4 +173,174 @@
 
 	<div id="color-palette"></div>
 </body>
+
+<script type="text/javascript"> 
+	// THIS IS FOR THE PAINT-BUCKET
+	// Maybe make a "current tool" var that tells you what tool you're on
+	// so it can help do the right checks to trigger the right interactions
+
+
+	// Tool variable
+	var myTool;
+
+	// number of tools in quickslot
+	var numqsTools = 0;
+
+	var bottomTools = ["pencil", "erase", "fill", "palette", "hand", "zoom"];
+
+	// highlights the tool you clicked on
+	function highlight(botTool) {
+		var selTool = document.getElementById(botTool);
+		selTool.style.outline = "5px solid red";
+		for (let i = 0; i < bottomTools.length; i++) {
+			if (bottomTools[i] !== botTool) {
+				var t = document.getElementById(bottomTools[i]);
+				t.style.outline = "";
+			}
+		}
+	}
+			
+
+
+	/////////////// PENCIL /////////////////
+	$("#pencil").click(function() {
+		myTool = document.getElementById("pencil");
+		$("#pencil_icon").css('color', 'blue');
+	});
+				
+	// Pencil interaction
+	// IFF pencil and drag do this, so maybe differentiate the pencils when adding on to it 
+	// in the quickbar UI taskbar
+	function pencilInteraction() {
+		var myPath;
+		function onMouseDown(event) {
+			myPath = new Path();
+			myPath.strokeColor = $(myTool).color;
+		}
+
+		function onMouseDrag(event) {
+			myPath.add(event.point);
+		}
+	}
+	
+
+	/////////////// ERASER /////////////////
+	// The way I did the erase was that it's just a tool to add a bunch of white circles
+	// when dragged
+	
+	$("#erase").click(function() {
+			myTool = document.getElementById("erase");
+			$("#erase_icon").css('color', 'blue');
+		});
+
+	// Eraser interaction
+	function eraserInteraction() {
+		function onMouseDrag(event) {
+			var circle = new Path.Circle({
+			center: event.middlePoint,
+			radius: event.delta.length / 2
+			});
+		circle.fillColor = 'white';
+		}																	
+	}
+
+	// Palette interaction
+	// Should re-use code above 
+	function paletteInteraction() {
+
+	}
+
+	// Expand UI interaction
+	// Can make it so that if we click the button, it just switches from a whole toolbar
+	// to a truncated toolbar
+	function changeToolbarSize () {
+
+	}
+
+	// for drag ui, drag in to add, drag out to remove, click to use	
+	// the code steps are as follows:
+	// 1) get the exact instance of the object you want (ex: green pen)
+	// 2) we drag that to the toolbar and drop it, so let the items be dragable and dropable
+	// 3) append that exact object the the toolbar div
+	// 4) delete from the toolbar if object is dragged and dropped out of toolbar
+
+	//add and remove things from the toolbar
+	function drag_ui_add () {
+		$("#qs_tools").append("[insert item class here]")
+	}
+
+	function drag_ui_remove () {
+		$("#qs_tools").delete("[the item you want to delete]")
+	}
+
+	// initalizes quickslot after page loads
+	function init_qs() {
+		var t = document.getElementById("pencil");
+		var h = t.clientHeight;
+		var w = t.clientWidth;
+
+		document.getElementById("qs_tools").style.height = h + "px";
+		document.getElementById("qs_tools").style.width = w + "px";
+
+		var q = document.getElementsByClassName("qs_ui")
+		for (let i = 0; i < q.length; i++) {
+			q[i].style.width = w + "px";
+		}
+	}
+
+	
+	// resizes the quickslot when you add or remove items
+	function resize_qs() {
+		t = document.getElementById("pencil");
+		h = t.clientHeight * numqsTools;
+		document.getElementById("qs_tools").style.height = h + "px";
+	}
+
+	// The other icon functionalities things should be implemented after
+	$(document).ready(function() {
+		// inits
+		$("#expand").hide();
+		init_qs();
+
+		// collaspes quick slot ui
+		$("#collaspe").click(function() {
+			$("#qs_tools").hide();
+			$("#expand").show();
+			$("#collaspe").hide();
+		});
+
+		// expands quickslot ui
+		$("#expand").click(function() {
+			$("#qs_tools").show();
+			$("#expand").hide();
+			$("#collaspe").show();
+		});
+
+		// allows for dragging quickslot ui
+		$("#drag_ui").draggable({
+			revert: "invalid"
+		});
+
+		$("#myCanvas").droppable({
+			accept: "#drag_ui"
+		});
+
+		// allows for dragging tools into the quickslot
+		$(".draggable_tool").draggable({
+			helper: "clone"
+		});
+
+		$("#qs_tools").droppable({
+			accept: ".draggable_tool",
+			drop: function(event, ui) {
+				$(this).append($(ui.draggable).clone());
+				numqsTools = numqsTools + 1;
+				resize_qs();
+			}
+		});
+
+	});
+
+</script>
+
 </html>

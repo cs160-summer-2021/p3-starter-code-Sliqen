@@ -34,6 +34,7 @@ html, body {
 
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 #bottom_ui {
@@ -45,6 +46,7 @@ html, body {
     
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 #undo {
@@ -94,6 +96,7 @@ html, body {
 /* Classes */
 .top_ui_tool {
     font-size: 70px;
+    
     /* temp */
     outline-width: 1px;
     outline-color: black;
@@ -103,8 +106,13 @@ html, body {
 .bottom_ui_tool {
     font-size: 70px;
 
-    /* temp */
-    outline-width: 1px;
+    /* temp 
+    outline-width: 5px;
     outline-color: black;
-    outline-style: solid;
+    outline-style: solid; */
+}
+
+.ui_tool_margin {
+    margin-left: 50px;
+    margin-right: 50px;
 }
