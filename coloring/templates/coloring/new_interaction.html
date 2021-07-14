@@ -283,11 +283,13 @@
 			trash_mode = false;
 			document.getElementById('trash').style.outline = "none";
 			info.innerHTML = 'Drag pencil, eraser, or bucket here and click to use';
+			document.getElementById('drag_ui').style.border = "3px solid black";
 			info.style.backgroundColor = 'skyblue';
 			return trash_mode;
 		} else {
 			trash_mode = true;
 			document.getElementById('trash').style.outline = "5px solid red";
+			document.getElementById('drag_ui').style.border = "3px solid red";
 			info.innerHTML = 'Click tool to remove';
 			info.style.backgroundColor = 'red';
 			return trash_mode;
