@@ -31,7 +31,7 @@
 			<i class="bi bi-arrow-clockwise"></i> <div style="font-size: 15px;">&nbsp;&nbsp;  Rotate </div> </span>
 
 		<span class="top_ui_tool ui_tool_margin" id="trash" onclick="trashcan();">
-			&nbsp;&nbsp;&nbsp;<i class="bi bi-trash"></i> <div style="font-size: 15px;"> Quickslot Trashcan Toggle</div> </span>
+			&nbsp;&nbsp;&nbsp;&nbsp;<i class="bi bi-trash"></i> <div style="font-size: 15px;"> Drag saved tools here to delete</div> </span>
 	</div>
 
 	<canvas id="myCanvas"></canvas>
@@ -59,8 +59,8 @@
 
 	<div id="drag_ui" style="border:3px solid black;"> 
 		<div class="qs_ui" id="drag_icon"> <i style="height:30px;width:99px;" class="bi bi-grip-horizontal" ></i> </div>
-		<div class="qs_ui" id="drag_info" style="font-size:10px;height:38px;background-color:skyblue"> Drag pencil, eraser, or bucket here and click to use</div>
-		<div class="qs_ui" id="qs_tools" style="height:40px;"> </div>
+		<!-- <div class="qs_ui" id="drag_info" style="font-size:10px;height:38px;background-color:skyblue" onclick="trashcan();"> Click here to delete saved tools</div> -->
+		<div class="qs_ui" id="qs_tools" style="height:60px;"> Drag a pencil, eraser or bucket here to save and click again to use! </div>
 		<div class="qs_ui" id="collaspe" style="height:20px;"> <i class="bi bi-chevron-compact-up"></i> </div>
 		<div class="qs_ui" id="expand" style="height:20px;"> <i class="bi bi-chevron-compact-down"></i> </div>
 	</div>
@@ -276,20 +276,20 @@
 
 	// enables throwing away tools from quickslot
 	function trashcan() {
-		var info = document.getElementById('drag_info');
+		//var info = document.getElementById('drag_info');
 		if (trash_mode === true) {
 			trash_mode = false;
 			document.getElementById('trash').style.outline = "none";
-			info.innerHTML = 'Drag pencil, eraser, or bucket here and click to use';
+			//info.innerHTML = 'Click here to delete saved tools';
 			document.getElementById('drag_ui').style.border = "3px solid black";
-			info.style.backgroundColor = 'skyblue';
+			//info.style.backgroundColor = 'skyblue';
 			return trash_mode;
 		} else {
 			trash_mode = true;
 			document.getElementById('trash').style.outline = "5px solid red";
 			document.getElementById('drag_ui').style.border = "3px solid red";
-			info.innerHTML = 'Click tool to remove';
-			info.style.backgroundColor = 'red';
+			//info.innerHTML = '<b>Click a tool to delete</b> <br> Click this again to turn off delete mode';
+			//info.style.backgroundColor = 'red';
 			return trash_mode;
 		}
 	}
@@ -364,7 +364,7 @@
 		h = t.clientWidth;
 		w = t.clientWidth;
 		var qs_tool = document.getElementById("qs_tools");
-		qs_tool.style.height = h + "px";
+		qs_tool.style.height = 99 + "px";
 		qs_tool.style.width = 99 + "px";
 		document.getElementById("drag_ui").style.width = 99 + "px";
 
@@ -388,7 +388,8 @@
 	function resize_qs() {
 		t = document.getElementById("pencil");
 		if (numqsTools < 1) {
-			h = t.clientHeight;
+			h = 99 + "px";
+			document.getElementById("qs_tools").innerHTML = "Drag a pencil, eraser or bucket here to save and click again to use!";
 		} else {
 			h = t.clientHeight * numqsTools;
 		}
@@ -443,7 +444,8 @@
 		// allows for dragging quickslot ui
 		$("#drag_icon").mousedown(function() {
 			$("#drag_ui").draggable({
-				revert: "invalid"
+				revert: "invalid",
+				containment: "parent"
 			});
 		});
 
@@ -457,10 +459,6 @@
 			helper: "clone"
 		});
 
-		$(".can_drag").draggable({
-			revert: "invalid"
-		});
-
 		$("#qs_tools").droppable({
 			accept: ".draggable_tool",
 			drop: function(event, ui) {
@@ -469,13 +467,27 @@
 				toolcopy.css('margin-right', '0px');
 				toolcopy.css('outline', 'none');
 				toolcopy.addClass("can_drag");
-
-				toolcopy.remove(".draggable_tool");
+				toolcopy.removeClass("draggable_tool");
 				toolcopy.find('div').remove();
 				toolcopy.append('<br>');
-				
+				toolcopy.draggable({
+					revert: "invalid"
+				});
+				if (numqsTools < 1) {
+					$(this).empty();
+				}
 				$(this).append(toolcopy);
 				numqsTools = numqsTools + 1;
+				resize_qs();
+				return false;
+			}
+		});
+
+		$("#trash").droppable( {
+			accept: ".can_drag",
+			drop: function(event, ui) {
+				$(ui.draggable).remove();
+				numqsTools = numqsTools - 1;
 				resize_qs();
 			}
 		});
