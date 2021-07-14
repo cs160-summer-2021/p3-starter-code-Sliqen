@@ -124,7 +124,6 @@
 // got the regex from https://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
 	function getColor(c) {
 		if (c === "#000000") {
-			//console.log('blac');
 			return 'black';
 		} else {
 			var hex = "#";
@@ -164,7 +163,6 @@
 		tool.onMouseDown = function (event) {
 			myPath = new paper.Path();
 			my_paths_list.push(myPath);
-			console.log(my_paths_list);
 			if (cur_Tool === "fill") {
 				var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
 				if (hit) {
