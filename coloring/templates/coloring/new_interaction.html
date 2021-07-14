@@ -388,11 +388,12 @@
 	
 	// resizes the quickslot when you add or remove items
 	function resize_qs() {
-		if (numqsTools < 1) {
-			numqsTools = 1;
-		}
 		t = document.getElementById("pencil");
-		h = t.clientHeight * numqsTools;
+		if (numqsTools < 1) {
+			h = t.clientHeight;
+		} else {
+			h = t.clientHeight * numqsTools;
+		}
 		w = t.clientHeight;
 		document.getElementById("qs_tools").style.height = h + "px";
 		document.getElementById("drag_ui").style.width = w + "px";
