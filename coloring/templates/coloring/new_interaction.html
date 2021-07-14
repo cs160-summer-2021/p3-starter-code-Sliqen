@@ -21,51 +21,62 @@
 		<span class="top_ui_tool draggable_tool ui_tool_margin" id="undo" onclick=""> 
 			<i class="bi bi-arrow-left"></i> </span>
 		
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="redo">
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="redo" onclick="">
 			<i class="bi bi-arrow-right"></i> </span>
 
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="grid"> 
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="grid" onclick=""> 
 			<i class="bi bi-grid-3x3"></i> </span>
 
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-left"> 
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-left" onclick=""> 
 			<i class="bi bi-arrow-counterclockwise"></i> </span>
 			
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-right"> 
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-right" onclick=""> 
 			<i class="bi bi-arrow-clockwise"></i> </span>
+
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="trash" onclick="trashcan();"> 
+			<i class="bi bi-trash"></i> </span>
+
+
+
 
 	</div>
 
 	<canvas id="myCanvas" width="750px" height="750px"></canvas>
 
 	<div id="bottom_ui">  
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="pencil" onclick="highlight('pencil');"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="pencil" onclick="highlight(this, 'pencil');"> 
 			<i class="bi bi-pencil" id="pencil_icon"></i></span>
 
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="erase" onclick="highlight('erase');"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="erase" onclick="highlight(this, 'erase');"> 
 			<i class="bi bi-eraser-fill" id="erase_icon"></i></span>
 
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="fill" onclick="highlight('fill');"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="fill" onclick="highlight(this, 'fill');"> 
 			<i class="bi bi-paint-bucket"></i> </span>
 
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="palette" onclick="showPalette();"> 
 			<i class="bi bi-palette"></i> </span>
 
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="hand"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="hand" onclick=""> 
 			<i class="fa fa-hand-paper-o" aria-hidden="true"></i> </span>
 			
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="zoom"> 
+		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="zoom" onclick=""> 
 			<i class="bi bi-zoom-in"></i></span>
 			
 	</div>
 
-	<div id="drag_ui" style="overflow:hidden;"> 
-		<div class="qs_ui" id="drag_icon" style="height:20px;width:60px;background-color:green"> </div>
-		<div class="qs_ui" id="qs_tools" style="height:40px;width:60px;background-color:skyblue"> </div>
-		<div class="qs_ui" id="collaspe" style="height:20px;width:60px;background-color:pink"> </div>
-		<div class="qs_ui" id="expand" style="height:20px;width:60px;background-color:black"> </div>
+	<div id="drag_ui" style=""> 
+		<div class="qs_ui" id="drag_icon" style="height:20px;background-color:green"> </div>
+		<div class="qs_ui" id="qs_tools" style="height:40px;border:3px solid black;"> </div>
+		<div class="qs_ui" id="collaspe" style="height:20px;background-color:pink"> </div>
+		<div class="qs_ui" id="expand" style="height:20px;background-color:black"> </div>
 	</div>
 
 	<div id="color-palette"></div>
+
+	<div id="opacity">
+		Please enter a value between 1 to 13 to see more shades. 1 to 9 for palette A, and 10 to 13 for palette B.
+		<input type="number" id="opVal" min="1" max="13"/> <button onclick="palette_Opacity(document.getElementById('opVal').value)"> Enter </button>
+	</div>
 </body>
 
 <script type="text/javascript" canvas="canvas" > 
@@ -75,7 +86,7 @@
 
 
 	// Current color
-	var current_Color = 'blue';
+	var cur_Color = 'black';
 
 	// Tool variable
 	var cur_Tool = "pencil";
@@ -87,6 +98,8 @@
 
 	var canvas = document.getElementById('myCanvas');
 
+	var trash_mode = false;
+	
 	// coloring page
 	var mandala = {
 		item: null,
@@ -101,14 +114,43 @@
 		$container: $('#color-palette')
 	}
 
+
+// Got the regex from https://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
+
+	function getColor(c) {
+		if (c === "#000000") {
+			console.log('blac');
+			return 'black';
+		} else {
+			var hex = "#";
+			var rgb = c.match(/\d+/g);
+    		//console.log(rgb);  
+			for (let i = 0; i < 3; i++) {
+				//convert rgb[i] to hex;
+				let myNum = parseInt(rgb[i]);
+				let hexNum = myNum.toString(16);
+				hex = hex + hexNum;
+				//console.log(hexNum);
+			}
+			//console.log(hex);
+
+			return hex;
+		}
+	}
+
+	
+	
 	function myCustomInteraction() {
 		var tool = new paper.Tool();
-		var myPath = new paper.Path();
-		myPath.strokeColor = 'black'; // create var cur_color
-
+		var myPath;
+		// myPath.strokeColor = getColor(cp.history[cp.history.length - 1]); // create var cur_color
 		// If mouse drag and have pencil we can draw
+
+		//console.log(historyString);
 		tool.onMouseDrag = function (event) {
 			if (cur_Tool === "pencil") {
+				//var myPath = new paper.Path();
+				myPath.strokeColor = cur_Color;
 				myPath.add(event.point);
 			}
 
@@ -122,15 +164,20 @@
 			}
 		}
 
+
 		// If mouse click and have fill we can draw
 		tool.onMouseDown = function (event) {
+			myPath = new paper.Path();
 			if (cur_Tool === "fill") {
 				var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
 				if (hit) {
 						// Color pallette keeps track of the full history of colors, though we
 						// only color in with the most-recent color.
-					hit.item.fillColor = cp.history[cp.history.length - 1];
+					hit.item.fillColor = cur_Color;
 				}
+			} 
+			if (cur_Tool === "pencil") {
+				myPath.strokeColor = cur_Color;		
 			}
 		}
 	}
@@ -145,6 +192,10 @@
 			$swatch.click(function(){
 				// add color to the color palette history
 				cp.history.push($(this).css("background-color"));
+				document.getElementById("pencil").style.color = $(this).css("background-color");
+				document.getElementById("fill").style.color = $(this).css("background-color");
+				//console.log(document.getElementById("#pencil").style.color);
+				cur_Color = $(this).css("background-color");
 			});
 			cp.$container.append($swatch);
 		}
@@ -161,6 +212,24 @@
 			createColorPalette(cp.options);
 		});
 	}
+	
+	opacities = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', 'a100', 'a200', 'a400', 'a700'];
+	// allows user to toggle the opacity of the palette
+	function palette_Opacity(opacity){
+		
+		cp.options = [];
+		cp.$container.html(" ");
+		$.getJSON('/static/coloring/vendors/material/material-colors.json', function(colors){
+			var keys = Object.keys(colors);
+			for (var i = keys.length - 1; i >= 0; i--) {
+				cp.options.push(colors[keys[i]][opacities[opacity]]);
+			}
+			createColorPalette(cp.options);
+		});
+	}	
+
+
+	
 
 	function init(custom){
 		paper.setup(canvas);
@@ -168,6 +237,11 @@
 
 		paper.project.importSVG(mandala.filePath, function(item) {
 			mandala.item = item._children["design-freepik"];
+
+			mandala.item = mandala.item.scale(0.65);
+			mandala.item.position.x += 110;
+			mandala.item.position.y -= 110;
+
 			paper.project.insertLayer(0,mandala.item);
 
 			if (custom) {
@@ -183,31 +257,50 @@
 	init(true);
 
 
-
+	function trashcan() {
+		if (trash_mode === true) {
+			trash_mode = false;
+			document.getElementById('trash').style.outline = "none";
+			return trash_mode;
+		} else {
+			trash_mode = true;
+			document.getElementById('trash').style.outline = "5px solid red";
+			return trash_mode;
+		}
+	}
+	
 	// highlights the tool you clicked on
-	function highlight(botTool) {
-		var selTool = document.getElementById(botTool);
-		selTool.style.outline = "5px solid red";
-		for (let i = 0; i < bottomTools.length; i++) {
-			if (bottomTools[i] !== botTool) {
-				var t = document.getElementById(bottomTools[i]);
-				t.style.outline = "";
+	function highlight(u, botTool) {
+		console.log("trash mode is " + trash_mode);
+		if (trash_mode) {
+			if (u.classList.contains("can_drag")) {
+				console.log("hi");
+				$(u).remove();
+				numqsTools = numqsTools - 1;
+				resize_qs();
 			}
+			return;
 		}
 
+		for (let i = 0; i < bottomTools.length; i++) {
+			var t = document.getElementById(bottomTools[i]);
+			t.style.outline = "";
+		}
+		var qs = document.getElementsByClassName("can_drag");
+		for (let i = 0; i < qs.length; i++) {
+			qs[i].style.outline = "";
+		}
+
+		u.style.outline = "5px solid red";
+
 		cur_Tool = botTool;
+		if (botTool === 'pencil' || botTool === 'fill') {
+			cur_Color = u.style.color;
+		}
 	}
 
-	// for drag ui, drag in to add, drag out to remove, click to use	
-	// the code steps are as follows:
-	// 1) get the exact instance of the object you want (ex: green pen)
-	// 2) we drag that to the toolbar and drop it, so let the items be dragable and dropable
-	// 3) append that exact object the the toolbar div
-	// 4) delete from the toolbar if object is dragged and dropped out of toolbar
 
 	//remove things from the toolbar
-
-
 	function drag_ui_remove () {
 		$("#qs_tools").delete("[the item you want to delete]")
 	}
@@ -217,24 +310,29 @@
 	// initalizes quickslot after page loads
 	function init_qs() {
 		var t = document.getElementById("pencil");
-		var h = t.clientHeight;
-		var w = t.clientWidth;
+		h = t.clientWidth;
+		w = t.clientWidth;
+		var qs_tool = document.getElementById("qs_tools");
+		qs_tool.style.height = h + "px";
+		qs_tool.style.width = w + "px";
+		qs_tool.style.border = "3px solid black";
+		document.getElementById("drag_ui").style.width = w + "px";
 
-		document.getElementById("qs_tools").style.height = h + "px";
-		document.getElementById("qs_tools").style.width = w + "px";
-
-		var q = document.getElementsByClassName("qs_ui")
+		var q = document.getElementsByClassName("qs_ui");
 		for (let i = 0; i < q.length; i++) {
 			q[i].style.width = w + "px";
 		}
 	}
 
 	$("#color-palette").hide();
+	$("#opacity").hide();
 	function showPalette() {
 		if ($("#color-palette").is(":visible")) {
 			$("#color-palette").hide();
+			$("#opacity").hide();
 		} else {
 			$("#color-palette").show();
+			$("#opacity").show();
 		}
 	}
 
@@ -245,9 +343,19 @@
 	
 	// resizes the quickslot when you add or remove items
 	function resize_qs() {
+		if (numqsTools < 1) {
+			numqsTools = 1;
+		}
 		t = document.getElementById("pencil");
 		h = t.clientHeight * numqsTools;
+		w = t.clientHeight;
 		document.getElementById("qs_tools").style.height = h + "px";
+		document.getElementById("drag_ui").style.width = w + "px";
+		var q = document.getElementsByClassName("qs_ui");
+		for (let i = 0; i < q.length; i++) {
+
+			q[i].style.width = w + "px";
+		}
 	}
 
 	
@@ -256,7 +364,6 @@
 	$(document).ready(function() {
 		// inits
 		$("#expand").hide();
-		init_qs();
 
 		// collaspes quick slot ui
 		$("#collaspe").click(function() {
@@ -273,8 +380,10 @@
 		});
 
 		// allows for dragging quickslot ui
-		$("#drag_ui").draggable({
-			revert: "invalid"
+		$("#drag_icon").mousedown(function() {
+			$("#drag_ui").draggable({
+				revert: "invalid"
+			});
 		});
 
 
@@ -287,6 +396,10 @@
 			helper: "clone"
 		});
 
+		$(".can_drag").draggable({
+			revert: "invalid"
+		});
+
 		$("#qs_tools").droppable({
 			accept: ".draggable_tool",
 			drop: function(event, ui) {
@@ -296,13 +409,8 @@
 				toolcopy.css('outline', 'none');
 				toolcopy.addClass("can_drag");
 
-				$(".can_drag").draggable({
-					revert: "invalid"
-				});
-
 				toolcopy.remove(".draggable_tool");
-
-				console.log(toolcopy.classname)
+				
 				$(this).append(toolcopy);
 				numqsTools = numqsTools + 1;
 				resize_qs();
@@ -311,6 +419,7 @@
 
 	});
 
+	init_qs();
 
 </script>
 

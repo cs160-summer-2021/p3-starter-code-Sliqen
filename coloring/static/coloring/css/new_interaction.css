@@ -15,6 +15,8 @@ html, body {
     margin-left: auto;
     margin-right: auto;
     display: block;
+    align-items:center;
+    object-fit: scale-down;
 }
 
 #color-palette {
@@ -24,6 +26,15 @@ html, body {
     flex-wrap: wrap;
     position: absolute;
     top: 0;
+}
+
+#opacity {
+    width: 300px;
+    background-color: #f1f1f1;
+    display: flex;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 400px;
 }
 
 .swatch {
@@ -40,7 +51,7 @@ html, body {
     position: absolute;
     top: 30%;
     left: 0%;
-    background-color: red;
+    background-color: white; 
 }
 
 
@@ -88,8 +99,12 @@ html, body {
 
 }
 
-#pencil {
+#trash {
 
+}
+
+#pencil {
+    
 }
 
 #erase {
@@ -122,10 +137,10 @@ html, body {
 .top_ui_tool {
     font-size: 70px;
     
-    /* temp */
+    /* temp 
     outline-width: 1px;
     outline-color: black;
-    outline-style: solid;
+    outline-style: solid; */
 }
 
 .bottom_ui_tool {
