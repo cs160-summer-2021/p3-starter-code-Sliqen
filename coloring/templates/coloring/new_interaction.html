@@ -18,30 +18,23 @@
 </head>
 <body>
 	<div id="top_ui">  
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="undo" onclick=""> 
-			 <i class="bi bi-arrow-left"></i> <div style="font-size: 15px;">&nbsp;&nbsp;  Undo </div> </span>
+		<span class="top_ui_tool ui_tool_margin" id="undo" onclick=" undo_draw();"> 
+			 <i class="bi bi-arrow-left"></i> <div style="font-size: 15px;">  Undo Pencil </div> </span>
 		
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="redo" onclick="">
-			 <i class="bi bi-arrow-right"></i> <div style="font-size: 15px;"> &nbsp;&nbsp; Redo </div> </span>
+		<span class="top_ui_tool ui_tool_margin" id="redo" onclick="redo_draw();">
+			 <i class="bi bi-arrow-right"></i> <div style="font-size: 15px;">  Redo Pencil </div> </span>
 
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="grid" onclick=""> 
-			<i class="bi bi-grid-3x3"></i> <div style="font-size: 15px;"> Grid Toggle </div> </span>
-
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-left" onclick=""> 
+		<span class="top_ui_tool ui_tool_margin" id="rotate-left" onclick="rotate_Left();"> 
 			 <i class="bi bi-arrow-counterclockwise"></i> <div style="font-size: 15px;">&nbsp;&nbsp; Rotate </div>  </span>
 			
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-right" onclick=""> 
+		<span class="top_ui_tool ui_tool_margin" id="rotate-right" onclick="rotate_Right();"> 
 			<i class="bi bi-arrow-clockwise"></i> <div style="font-size: 15px;">&nbsp;&nbsp;  Rotate </div> </span>
 
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="trash" onclick="trashcan();">
+		<span class="top_ui_tool ui_tool_margin" id="trash" onclick="trashcan();">
 			&nbsp;&nbsp;&nbsp;<i class="bi bi-trash"></i> <div style="font-size: 15px;"> Quickslot Trashcan Toggle</div> </span>
-
-
-
-
 	</div>
 
-	<canvas id="myCanvas" width="750px" height="750px"></canvas>
+	<canvas id="myCanvas"></canvas>
 
 	<div id="bottom_ui">  
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="pencil" onclick="highlight(this, 'pencil');"> 
@@ -53,54 +46,66 @@
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="fill" onclick="highlight(this, 'fill');"> 
 			&nbsp;<i class="bi bi-paint-bucket"></i><div style="font-size: 15px;">   Paint Bucket </div> </span>
 
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="palette" onclick="showPalette();"> 
+		<span class="bottom_ui_tool ui_tool_margin" id="palette" onclick="showPalette();"> 
 			<i class="bi bi-palette"></i> <div style="font-size: 15px;"> Palette Toggle </div> </span>
 
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="hand" onclick=""> 
+		<span class="bottom_ui_tool ui_tool_margin" id="hand" onclick="drag_on();highlight(this, 'drag');"> 
 			<i class="fa fa-hand-paper-o" aria-hidden="true"></i> <div style="font-size: 15px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Drag </div> </span>
 			
-		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="zoom" onclick=""> 
-			<i class="bi bi-zoom-in"></i> <div style="font-size: 15px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Zoom </div></span>
-			
+		<span class="bottom_ui_tool ui_tool_margin" id="zoom"> 
+			<span onclick="zoomIn();"><i class="bi bi-zoom-in"></i> </span> <span onclick="zoomOut();"><i class="bi bi-zoom-out"> </i> </span>
+			<div style="font-size: 15px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Zoom </div></span>	
 	</div>
 
 	<div id="drag_ui" style="border:3px solid black;"> 
 		<div class="qs_ui" id="drag_icon"> <i style="height:30px;width:99px;" class="bi bi-grip-horizontal" ></i> </div>
-		<div class="qs_ui" id="drag_info" style="font-size:10px;height:20px;background-color:skyblue"> Click tool to use</div>
+		<div class="qs_ui" id="drag_info" style="font-size:10px;height:35px;background-color:skyblue"> Drag pencil, eraser, or bucket here to save to use</div>
 		<div class="qs_ui" id="qs_tools" style="height:40px;"> </div>
 		<div class="qs_ui" id="collaspe" style="height:20px;"> <i class="bi bi-chevron-compact-up"></i> </div>
 		<div class="qs_ui" id="expand" style="height:20px;"> <i class="bi bi-chevron-compact-down"></i> </div>
 	</div>
-
-	<div id="color-palette"></div>
- 
-	<div id="opacity">
-		Please enter a value between 1 to 13 to see more shades. 1 to 9 for palette A, and 10 to 13 for palette B.
-		<input type="number" id="opVal" min="1" max="13"/> <button onclick="palette_Opacity(document.getElementById('opVal').value)"> Enter </button>
+	
+	<div id='palette_box' style="position: absolute; left: 55%; top: 20%; text-align:center; color: white;"> 
+		Please select a color. Click the palette toggle again to hide me.
+		<div id="color-palette">  </div> 
 	</div>
 	
 </body>
 
 <script type="text/javascript" canvas="canvas" > 
-	// THIS IS FOR THE PAINT-BUCKET
-	// Maybe make a "current tool" var that tells you what tool you're on
-	// so it can help do the right checks to trigger the right interactions
 
+	// array of paths
+	var my_paths_list = [];
 
-	// Current color
+	// array of redo paths
+	var my_redo_list = [];
+
+	// global var of image
+	var the_image;
+
+	// current color
 	var cur_Color = 'black';
 
-	// Tool variable
+	// tool variable
 	var cur_Tool = "pencil";
 
-	// number of tools in quickslot
+	// number of tools in the quickslot
 	var numqsTools = 0;
 
-	var bottomTools = ["pencil", "erase", "fill", "palette", "hand", "zoom"];
+	// list of tools on the bottom menu that get highlighted
+	var bottomTools = ["pencil", "erase", "fill", "hand"];
 
+	// global variable of the canvas
 	var canvas = document.getElementById('myCanvas');
 
+	// enables throwing away quickslot tools
 	var trash_mode = false;
+
+	// enables dragging canvas
+	var drag_mode = 'disable';
+
+	// the different shades of colors
+	shades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', 'a100', 'a200', 'a400', 'a700'];
 	
 	// coloring page
 	var mandala = {
@@ -116,9 +121,7 @@
 		$container: $('#color-palette')
 	}
 
-
-// Got the regex from https://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
-
+// got the regex from https://stackoverflow.com/questions/10970958/get-a-color-component-from-an-rgb-string-in-javascript
 	function getColor(c) {
 		if (c === "#000000") {
 			//console.log('blac');
@@ -126,32 +129,22 @@
 		} else {
 			var hex = "#";
 			var rgb = c.match(/\d+/g);
-    		//console.log(rgb);  
 			for (let i = 0; i < 3; i++) {
-				//convert rgb[i] to hex;
 				let myNum = parseInt(rgb[i]);
 				let hexNum = myNum.toString(16);
 				hex = hex + hexNum;
-				//console.log(hexNum);
 			}
-			//console.log(hex);
-
 			return hex;
 		}
 	}
 
 	
-	
 	function myCustomInteraction() {
 		var tool = new paper.Tool();
 		var myPath;
-		// myPath.strokeColor = getColor(cp.history[cp.history.length - 1]); // create var cur_color
-		// If mouse drag and have pencil we can draw
 
-		//console.log(historyString);
 		tool.onMouseDrag = function (event) {
 			if (cur_Tool === "pencil") {
-				//var myPath = new paper.Path();
 				myPath.strokeColor = cur_Color;
 				myPath.add(event.point);
 			}
@@ -167,14 +160,16 @@
 		}
 
 
-		// If mouse click and have fill we can draw
+		// if mouse click and have fill we can draw
 		tool.onMouseDown = function (event) {
 			myPath = new paper.Path();
+			my_paths_list.push(myPath);
+			console.log(my_paths_list);
 			if (cur_Tool === "fill") {
 				var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
 				if (hit) {
 						// Color pallette keeps track of the full history of colors, though we
-						// only color in with the most-recent color.
+						// Only color in with the most-recent color.
 					hit.item.fillColor = cur_Color;
 				}
 			} 
@@ -192,11 +187,10 @@
 			var $swatch = $("<div>").css("background-color", colors[i])
 							.addClass("swatch");
 			$swatch.click(function(){
-				// add color to the color palette history
+				// Add color to the color palette history
 				cp.history.push($(this).css("background-color"));
 				document.getElementById("pencil").style.color = $(this).css("background-color");
 				document.getElementById("fill").style.color = $(this).css("background-color");
-				//console.log(document.getElementById("#pencil").style.color);
 				cur_Color = $(this).css("background-color");
 			});
 			cp.$container.append($swatch);
@@ -209,41 +203,24 @@
 		$.getJSON('/static/coloring/vendors/material/material-colors.json', function(colors){
 			var keys = Object.keys(colors);
 			for (var i = keys.length - 1; i >= 0; i--) {
-				cp.options.push(colors[keys[i]][500]);
+				for (let j = 0; j < shades.length; j++) {
+					cp.options.push(colors[keys[i]][shades[j]]);
+				}
 			}
 			createColorPalette(cp.options);
 		});
 	}
-	
-	opacities = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', 'a100', 'a200', 'a400', 'a700'];
-	// allows user to toggle the opacity of the palette
-	function palette_Opacity(opacity){
 		
-		cp.options = [];
-		cp.$container.html(" ");
-		$.getJSON('/static/coloring/vendors/material/material-colors.json', function(colors){
-			var keys = Object.keys(colors);
-			for (var i = keys.length - 1; i >= 0; i--) {
-				cp.options.push(colors[keys[i]][opacities[opacity]]);
-			}
-			createColorPalette(cp.options);
-		});
-	}	
-
-
-	
-
 	function init(custom){
 		paper.setup(canvas);
 		getColorsCreatePalette();
 
 		paper.project.importSVG(mandala.filePath, function(item) {
 			mandala.item = item._children["design-freepik"];
-
 			mandala.item = mandala.item.scale(0.65);
 			mandala.item.position.x += 110;
-			mandala.item.position.y -= 110;
-
+			mandala.item.position.y -= 120;
+			the_image = mandala.item;
 			paper.project.insertLayer(0,mandala.item);
 
 			if (custom) {
@@ -255,16 +232,57 @@
 		});
 	}
 
-	// Set up the mandala interactivity.
+	// set up the mandala interactivity.
 	init(true);
 
 
+	// undo draw 
+	function undo_draw() {
+		if (my_paths_list.length > 0) {
+			let x = my_paths_list.pop();
+			let y = x.clone();
+			my_redo_list.push(y);
+			x.remove();
+			y.visible = false;
+		}
+	}
+
+	// redo draw
+	function redo_draw() {
+		if (my_redo_list.length > 0) {
+			let mypush = my_redo_list.pop();
+			mypush.visible = true;
+			my_paths_list.push(mypush);
+		} 
+	}
+
+	// rotates left
+	function rotate_Left() {
+		the_image = the_image.rotate(330);
+		paper.project.insertLayer(0, the_image);
+		for (let i = 0; i < my_paths_list.length; i++) {
+			single_path = my_paths_list[i].rotate(330);
+			paper.project.insertLayer(1, single_path);
+		}
+	}
+
+	// rotates right
+	function rotate_Right() {
+		the_image = the_image.rotate(30);
+		paper.project.insertLayer(0, the_image);
+		for (let i = 0; i < my_paths_list.length; i++) {
+			single_path = my_paths_list[i].rotate(30);
+			paper.project.insertLayer(1, single_path);
+		}
+	}
+
+	// enables throwing away tools from quickslot
 	function trashcan() {
 		var info = document.getElementById('drag_info');
 		if (trash_mode === true) {
 			trash_mode = false;
 			document.getElementById('trash').style.outline = "none";
-			info.innerHTML = 'Click tool to use';
+			info.innerHTML = 'Drag pencil, eraser, or bucket here to save to use';
 			info.style.backgroundColor = 'skyblue';
 			return trash_mode;
 		} else {
@@ -275,13 +293,35 @@
 			return trash_mode;
 		}
 	}
+
+	// zooms in on canvas
+	function zoomIn() {
+		the_image = the_image.scale(1.2);
+
+		for (let i = 0; i < my_paths_list.length; i++) {
+			my_paths_list[i] = my_paths_list[i].scale(1.2);
+		}
+		for (let j = 0; j < my_redo_list.length; j++) {
+			my_redo_list[j] = my_redo_list[j].scale(1.2);
+		}
+	}
+
+	// zooms out on canvas
+	function zoomOut() {
+		the_image = the_image.scale(0.8);
+
+		for (let i = 0; i < my_paths_list.length; i++) {
+			my_paths_list[i] = my_paths_list[i].scale(0.8);
+		}
+		for (let j = 0; j < my_redo_list.length; j++) {
+			my_redo_list[j] = my_redo_list[j].scale(0.8);
+		}
+	}
 	
 	// highlights the tool you clicked on
 	function highlight(u, botTool) {
-		//console.log("trash mode is " + trash_mode);
 		if (trash_mode) {
 			if (u.classList.contains("can_drag")) {
-				//console.log("hi");
 				$(u).remove();
 				numqsTools = numqsTools - 1;
 				resize_qs();
@@ -298,20 +338,24 @@
 			qs[i].style.outline = "";
 		}
 
-		u.style.outline = "5px solid red";
+		if (botTool === 'drag') {
+			if (drag_mode === 'enable') {
+				u.style.outline = "5px solid red";
+			} else {
+				u.style.outline = "";
+			}
+		} else {
+			u.style.outline = "5px solid red";
+		}
 
 		cur_Tool = botTool;
 		if (botTool === 'pencil' || botTool === 'fill') {
 			cur_Color = u.style.color;
 		}
+		if (botTool !== 'drag' && drag_mode === 'enable') {
+			drag_on();
+		}
 	}
-
-
-	//remove things from the toolbar
-	function drag_ui_remove () {
-		$("#qs_tools").delete("[the item you want to delete]")
-	}
-
 
 
 	// initalizes quickslot after page loads
@@ -322,7 +366,6 @@
 		var qs_tool = document.getElementById("qs_tools");
 		qs_tool.style.height = h + "px";
 		qs_tool.style.width = 99 + "px";
-		//qs_tool.style.border = "3px solid black";
 		document.getElementById("drag_ui").style.width = 99 + "px";
 
 		var q = document.getElementsByClassName("qs_ui");
@@ -332,19 +375,12 @@
 	}
 
 	function showPalette() {
-		if ($("#color-palette").is(":visible")) {
-			$("#color-palette").hide();
-			$("#opacity").hide();
+		if ($("#palette_box").is(":visible")) {
+			$("#palette_box").hide();
 		} else {
-			$("#color-palette").show();
-			$("#opacity").show();
+			$("#palette_box").show();
 		}
 	}
-
-	// collaspes quick slot ui
-
-
-
 	
 	// resizes the quickslot when you add or remove items
 	function resize_qs() {
@@ -363,14 +399,29 @@
 		}
 	}
 
+	// enables dragging canvas
+	function drag_on() {
+		if (drag_mode === 'disable') {
+			drag_mode = 'enable';
+			$("#myCanvas").draggable(drag_mode);
+		} else {
+			drag_mode = 'disable';
+			$("#myCanvas").draggable(drag_mode);
+		}
+	}
+
+	// initializes canvas to be draggable
+	function drag_init() {
+		$("#myCanvas").draggable();
+		$("#myCanvas").draggable('disable');
+	}
 	
 
 	// The other icon functionalities things should be implemented after
 	$(document).ready(function() {
 		// inits
 		$("#expand").hide();
-		$("#color-palette").hide();
-		$("#opacity").hide();
+		$("#palette_box").hide();
 
 		// collaspes quick slot ui
 		$("#collaspe").click(function() {
@@ -426,9 +477,10 @@
 			}
 		});
 
+		// calls init functions for quickslot and drag ui
+		init_qs();
+		drag_init();
 	});
-
-	init_qs();
 
 </script>
 
