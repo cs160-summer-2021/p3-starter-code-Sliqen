@@ -47,7 +47,7 @@
 			&nbsp;<i class="bi bi-paint-bucket"></i><div style="font-size: 15px;">   Paint Bucket </div> </span>
 
 		<span class="bottom_ui_tool ui_tool_margin" id="palette" onclick="showPalette();"> 
-			<i class="bi bi-palette"></i> <div style="font-size: 15px;"> Palette Toggle </div> </span>
+			<i class="bi bi-palette"></i> <div id="palette_view" style="font-size: 15px;"> Show Palette </div> </span>
 
 		<span class="bottom_ui_tool ui_tool_margin" id="hand" onclick="drag_on();highlight(this, 'drag');"> 
 			<i class="fa fa-hand-paper-o" aria-hidden="true"></i> <div style="font-size: 15px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Drag </div> </span>
@@ -66,7 +66,7 @@
 	</div>
 	
 	<div id='palette_box' style="position: absolute; left: 55%; top: 20%; text-align:center; color: white;"> 
-		Please select a color. Click the palette toggle again to hide me.
+		Please select a color. Click the palette again to hide me.
 		<div id="color-palette">  </div> 
 	</div>
 	
@@ -377,8 +377,10 @@
 	function showPalette() {
 		if ($("#palette_box").is(":visible")) {
 			$("#palette_box").hide();
+			document.getElementById('palette_view').innerHTML = 'Show Palette';
 		} else {
 			$("#palette_box").show();
+			document.getElementById('palette_view').innerHTML = 'Hide Palette';
 		}
 	}
 	
