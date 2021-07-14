@@ -19,22 +19,22 @@
 <body>
 	<div id="top_ui">  
 		<span class="top_ui_tool draggable_tool ui_tool_margin" id="undo" onclick=""> 
-			<i class="bi bi-arrow-left"></i> </span>
+			 <i class="bi bi-arrow-left"></i> <div style="font-size: 15px;">&nbsp;&nbsp;  Undo </div> </span>
 		
 		<span class="top_ui_tool draggable_tool ui_tool_margin" id="redo" onclick="">
-			<i class="bi bi-arrow-right"></i> </span>
+			 <i class="bi bi-arrow-right"></i> <div style="font-size: 15px;"> &nbsp;&nbsp; Redo </div> </span>
 
 		<span class="top_ui_tool draggable_tool ui_tool_margin" id="grid" onclick=""> 
-			<i class="bi bi-grid-3x3"></i> </span>
+			<i class="bi bi-grid-3x3"></i> <div style="font-size: 15px;"> Grid Toggle </div> </span>
 
 		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-left" onclick=""> 
-			<i class="bi bi-arrow-counterclockwise"></i> </span>
+			 <i class="bi bi-arrow-counterclockwise"></i> <div style="font-size: 15px;">&nbsp;&nbsp; Rotate </div>  </span>
 			
 		<span class="top_ui_tool draggable_tool ui_tool_margin" id="rotate-right" onclick=""> 
-			<i class="bi bi-arrow-clockwise"></i> </span>
+			<i class="bi bi-arrow-clockwise"></i> <div style="font-size: 15px;">&nbsp;&nbsp;  Rotate </div> </span>
 
-		<span class="top_ui_tool draggable_tool ui_tool_margin" id="trash" onclick="trashcan();"> 
-			<i class="bi bi-trash"></i> </span>
+		<span class="top_ui_tool draggable_tool ui_tool_margin" id="trash" onclick="trashcan();">
+			&nbsp;&nbsp;&nbsp;<i class="bi bi-trash"></i> <div style="font-size: 15px;"> Quickslot Trashcan Toggle</div> </span>
 
 
 
@@ -45,38 +45,40 @@
 
 	<div id="bottom_ui">  
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="pencil" onclick="highlight(this, 'pencil');"> 
-			<i class="bi bi-pencil" id="pencil_icon"></i></span>
+			<i class="bi bi-pencil" id="pencil_icon"></i><div style="font-size: 15px;">&nbsp;&nbsp;  Pencil </div></span>
 
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="erase" onclick="highlight(this, 'erase');"> 
-			<i class="bi bi-eraser-fill" id="erase_icon"></i></span>
+			<i class="bi bi-eraser-fill" id="erase_icon"></i><div style="font-size: 15px;">&nbsp;&nbsp;  Eraser </div></span>
 
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="fill" onclick="highlight(this, 'fill');"> 
-			<i class="bi bi-paint-bucket"></i> </span>
+			&nbsp;<i class="bi bi-paint-bucket"></i><div style="font-size: 15px;">   Paint Bucket </div> </span>
 
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="palette" onclick="showPalette();"> 
-			<i class="bi bi-palette"></i> </span>
+			<i class="bi bi-palette"></i> <div style="font-size: 15px;"> Palette Toggle </div> </span>
 
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="hand" onclick=""> 
-			<i class="fa fa-hand-paper-o" aria-hidden="true"></i> </span>
+			<i class="fa fa-hand-paper-o" aria-hidden="true"></i> <div style="font-size: 15px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Drag </div> </span>
 			
 		<span class="bottom_ui_tool draggable_tool ui_tool_margin" id="zoom" onclick=""> 
-			<i class="bi bi-zoom-in"></i></span>
+			<i class="bi bi-zoom-in"></i> <div style="font-size: 15px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Zoom </div></span>
 			
 	</div>
 
-	<div id="drag_ui" style=""> 
-		<div class="qs_ui" id="drag_icon" style="height:20px;background-color:green"> </div>
-		<div class="qs_ui" id="qs_tools" style="height:40px;border:3px solid black;"> </div>
-		<div class="qs_ui" id="collaspe" style="height:20px;background-color:pink"> </div>
-		<div class="qs_ui" id="expand" style="height:20px;background-color:black"> </div>
+	<div id="drag_ui" style="border:3px solid black;"> 
+		<div class="qs_ui" id="drag_icon" > <i class="bi bi-grip-horizontal" style="top:0;"></i> </div>
+		<div class="qs_ui" id="drag_info" style="font-size:10px;height:20px;background-color:skyblue"> Click tool to remove</div>
+		<div class="qs_ui" id="qs_tools" style="height:40px;"> </div>
+		<div class="qs_ui" id="collaspe" style="height:20px;"> <i class="bi bi-chevron-compact-up"></i> </div>
+		<div class="qs_ui" id="expand" style="height:20px;"> <i class="bi bi-chevron-compact-down"></i> </div>
 	</div>
 
 	<div id="color-palette"></div>
-
+ 
 	<div id="opacity">
 		Please enter a value between 1 to 13 to see more shades. 1 to 9 for palette A, and 10 to 13 for palette B.
 		<input type="number" id="opVal" min="1" max="13"/> <button onclick="palette_Opacity(document.getElementById('opVal').value)"> Enter </button>
 	</div>
+	
 </body>
 
 <script type="text/javascript" canvas="canvas" > 
@@ -119,7 +121,7 @@
 
 	function getColor(c) {
 		if (c === "#000000") {
-			console.log('blac');
+			//console.log('blac');
 			return 'black';
 		} else {
 			var hex = "#";
@@ -271,10 +273,10 @@
 	
 	// highlights the tool you clicked on
 	function highlight(u, botTool) {
-		console.log("trash mode is " + trash_mode);
+		//console.log("trash mode is " + trash_mode);
 		if (trash_mode) {
 			if (u.classList.contains("can_drag")) {
-				console.log("hi");
+				//console.log("hi");
 				$(u).remove();
 				numqsTools = numqsTools - 1;
 				resize_qs();
@@ -315,7 +317,7 @@
 		var qs_tool = document.getElementById("qs_tools");
 		qs_tool.style.height = h + "px";
 		qs_tool.style.width = w + "px";
-		qs_tool.style.border = "3px solid black";
+		//qs_tool.style.border = "3px solid black";
 		document.getElementById("drag_ui").style.width = w + "px";
 
 		var q = document.getElementsByClassName("qs_ui");
@@ -324,8 +326,6 @@
 		}
 	}
 
-	$("#color-palette").hide();
-	$("#opacity").hide();
 	function showPalette() {
 		if ($("#color-palette").is(":visible")) {
 			$("#color-palette").hide();
@@ -364,6 +364,8 @@
 	$(document).ready(function() {
 		// inits
 		$("#expand").hide();
+		$("#color-palette").hide();
+		$("#opacity").hide();
 
 		// collaspes quick slot ui
 		$("#collaspe").click(function() {

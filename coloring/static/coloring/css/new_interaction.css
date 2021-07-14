@@ -79,6 +79,13 @@ html, body {
     justify-content: space-between;
 }
 
+#drag_icon {
+    height:30px;
+    font-size:50px;
+    text-align: center;
+    padding-top:0;
+}
+
 #undo {
 
 }
@@ -101,6 +108,14 @@ html, body {
 
 #trash {
 
+}
+
+#trash_text {
+    position: absolute;
+    top: 20%;
+    left: 80%;
+    height: 10%;
+    width: 20%;
 }
 
 #pencil {
@@ -133,9 +148,13 @@ html, body {
     
 }
 
+.qs_ui {
+    text-align: center;
+}
+
 
 .top_ui_tool {
-    font-size: 70px;
+    font-size: 60px;
     
     /* temp 
     outline-width: 1px;
