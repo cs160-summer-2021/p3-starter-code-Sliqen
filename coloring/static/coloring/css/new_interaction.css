@@ -49,6 +49,7 @@ html, body {
 
 #drag_ui {
     position: absolute;
+    width:99px;
     top: 30%;
     left: 0%;
     background-color: white; 
@@ -81,8 +82,9 @@ html, body {
 
 #drag_icon {
     height:30px;
-    font-size:50px;
+    font-size:30px;
     text-align: center;
+    vertical-align:middle;
     padding-top:0;
 }
 
@@ -150,6 +152,7 @@ html, body {
 
 .qs_ui {
     text-align: center;
+    border:1px solid black;
 }
 
 
@@ -174,5 +177,10 @@ html, body {
 .ui_tool_margin {
     margin-left: 50px;
     margin-right: 50px;
+}
+
+.bi-grip-horizontal {
+    height:30px;
+    width:99px;
 }
 

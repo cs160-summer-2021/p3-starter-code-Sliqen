@@ -65,8 +65,8 @@
 	</div>
 
 	<div id="drag_ui" style="border:3px solid black;"> 
-		<div class="qs_ui" id="drag_icon" > <i class="bi bi-grip-horizontal" style="top:0;"></i> </div>
-		<div class="qs_ui" id="drag_info" style="font-size:10px;height:20px;background-color:skyblue"> Click tool to remove</div>
+		<div class="qs_ui" id="drag_icon"> <i style="height:30px;width:99px;" class="bi bi-grip-horizontal" ></i> </div>
+		<div class="qs_ui" id="drag_info" style="font-size:10px;height:20px;background-color:skyblue"> Click tool to use</div>
 		<div class="qs_ui" id="qs_tools" style="height:40px;"> </div>
 		<div class="qs_ui" id="collaspe" style="height:20px;"> <i class="bi bi-chevron-compact-up"></i> </div>
 		<div class="qs_ui" id="expand" style="height:20px;"> <i class="bi bi-chevron-compact-down"></i> </div>
@@ -260,13 +260,18 @@
 
 
 	function trashcan() {
+		var info = document.getElementById('drag_info');
 		if (trash_mode === true) {
 			trash_mode = false;
 			document.getElementById('trash').style.outline = "none";
+			info.innerHTML = 'Click tool to use';
+			info.style.backgroundColor = 'skyblue';
 			return trash_mode;
 		} else {
 			trash_mode = true;
 			document.getElementById('trash').style.outline = "5px solid red";
+			info.innerHTML = 'Click tool to remove';
+			info.style.backgroundColor = 'red';
 			return trash_mode;
 		}
 	}
@@ -316,13 +321,13 @@
 		w = t.clientWidth;
 		var qs_tool = document.getElementById("qs_tools");
 		qs_tool.style.height = h + "px";
-		qs_tool.style.width = w + "px";
+		qs_tool.style.width = 99 + "px";
 		//qs_tool.style.border = "3px solid black";
-		document.getElementById("drag_ui").style.width = w + "px";
+		document.getElementById("drag_ui").style.width = 99 + "px";
 
 		var q = document.getElementsByClassName("qs_ui");
 		for (let i = 0; i < q.length; i++) {
-			q[i].style.width = w + "px";
+			q[i].style.width = 99 + "px";
 		}
 	}
 
@@ -412,6 +417,8 @@
 				toolcopy.addClass("can_drag");
 
 				toolcopy.remove(".draggable_tool");
+				toolcopy.find('div').remove();
+				toolcopy.append('<br>');
 				
 				$(this).append(toolcopy);
 				numqsTools = numqsTools + 1;
